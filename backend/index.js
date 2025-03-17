@@ -6,7 +6,7 @@ connectToMongo();
 const app = express();
 const port = process.env.PORT || 8000;
 
-app.use(cors("https://inotebook-frontend-topaz.vercel.app/login"));
+app.use(cors("https://inotebook-frontend-topaz.vercel.app"));
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth.js'));
