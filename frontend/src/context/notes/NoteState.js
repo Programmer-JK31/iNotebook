@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import noteContext from "./noteContext";
 
 const NoteState = (props) => {
-    const host = "http://192.168.0.168:8000/"
+    const host = "http://localhost:8000/"
     const [notes,setNotes] = useState([]);
       
     const fetchNotes = async () => {

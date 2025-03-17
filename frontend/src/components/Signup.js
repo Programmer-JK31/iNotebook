@@ -1,19 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import AlertContext from "../context/alert/AlertContext";
+import AlertContext from '../context/alert/AlertContext';
 
-const Login = () => {
-    const [credentials, setCredentials] = useState({email : "", password: ""});
-    let navigate = useNavigate();
+function Signup() {
     const context = useContext(AlertContext);
     const {showAlert} = context;
+    const [credentials, setCredentials] = useState({name : "", email : "", password: ""});
+    let navigate = useNavigate();
 
     const onChange = (e) => {
         setCredentials({...credentials, [e.target.name] : e.target.value});
     }
     const handleSubmit = async(e)=> {
         e.preventDefault();
-        const response = await fetch('http://192.168.0.168:8000/api/auth/login', {
+        const response = await fetch('http://localhost:8000/api/auth/createuser', {
             method : "POST",
             headers : {
                 'Content-Type' : 'application/json'
@@ -21,20 +21,31 @@ const Login = () => {
             body : JSON.stringify(credentials)
         });
         if(response.status !== 200){
-            showAlert("warning","Invalid Credentials");
+            showAlert("warning","Email already in use. Please use different email for signup");
         } else {
             // Save the authToken and redirect
+            showAlert("success","Welcome to iNotebook");
             const json = await response.json();
             localStorage.setItem('token', json.authToken);
-            showAlert("success","Login Successful");
             navigate('/');
         }
-
     }
   return (
-    <div className="container mt-4">
+    <div className='container mt-4'>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
+        <label htmlFor="name" className="form-label">
+            Enter your Good Name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+            minLength={3}
+            onChange={onChange}
+            aria-describedby="emailHelp"
+          />
           <label htmlFor="email" className="form-label">
             Email address
           </label>
@@ -59,16 +70,17 @@ const Login = () => {
             className="form-control"
             id="password"
             name="password"
+            minLength={5}
             onChange={onChange}
           />
         </div>
         
-        <button type="submit" className="btn btn-primary">
+        <button  type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Signup;
